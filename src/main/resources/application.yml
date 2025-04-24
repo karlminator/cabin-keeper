@@ -1,0 +1,62 @@
+spring:
+  config:
+    import: optional:file:.env[.properties]
+  profiles:
+    active: dev
+  application:
+    name: cabin-keeper
+  # Grundläggande konfigurationer som är gemensamma för alla miljöer
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    open-in-view: false
+    properties:
+      hibernate:
+        format_sql: true
+
+# Loggningskonfiguration (gemensam för alla miljöer)
+logging:
+  level:
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+    se.karlminator.cabin_keeper: DEBUG
+
+server:
+  port: 8080
+
+---
+# Utvecklingsmiljö
+# docker-compose up -d || start only mysql docker image
+# mvn spring-boot:run  || run spring boot locally
+spring:
+  config:
+    activate:
+      on-profile: dev
+  datasource:
+    url: jdbc:mysql://localhost:3307/${MYSQL_DB:cabin_keeper_db}
+    username: ${MYSQL_USER}
+    password: ${MYSQL_PASSWORD}
+  jpa:
+    show-sql: true
+
+---
+# Produktionsmiljö
+# docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d --build || builds application and starts mysql and spring boot images
+spring:
+  config:
+    activate:
+      on-profile: prod
+  datasource:
+    url: jdbc:mysql://mysql:3306/${MYSQL_DB}
+    username: ${MYSQL_USER}
+    password: ${MYSQL_PASSWORD}
+  jpa:
+    show-sql: false
+  # Produktionsspecifika loggningsnivåer
+  logging:
+    level:
+      org.hibernate.SQL: INFO
+      org.hibernate.type.descriptor.sql.BasicBinder: INFO
+      se.karlminator.cabin_keeper: INFO

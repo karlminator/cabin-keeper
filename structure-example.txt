@@ -1,0 +1,75 @@
+inventory-management/
+│
+├── src/
+│   ├── main/
+│   │   ├── java/
+│   │   │   └── com/
+│   │   │       └── example/
+│   │   │           └── inventory/
+│   │   │               ├── InventoryApplication.java
+│   │   │               │
+│   │   │               ├── config/                  # Configuration classes
+│   │   │               │   └── SecurityConfig.java
+│   │   │               │
+│   │   │               ├── model/                   # Domain models
+│   │   │               │   ├── Product.java
+│   │   │               │   ├── Room.java
+│   │   │               │   ├── Category.java
+│   │   │               │   └── User.java
+│   │   │               │
+│   │   │               ├── dto/                     # Data Transfer Objects
+│   │   │               │   ├── ProductDTO.java
+│   │   │               │   ├── RoomDTO.java
+│   │   │               │   ├── CategoryDTO.java
+│   │   │               │   └── UserDTO.java
+│   │   │               │
+│   │   │               ├── repository/              # Data access layer
+│   │   │               │   ├── ProductRepository.java
+│   │   │               │   ├── RoomRepository.java
+│   │   │               │   ├── CategoryRepository.java
+│   │   │               │   └── UserRepository.java
+│   │   │               │
+│   │   │               ├── service/                 # Business logic layer
+│   │   │               │   ├── ProductService.java
+│   │   │               │   ├── RoomService.java
+│   │   │               │   ├── CategoryService.java
+│   │   │               │   └── UserService.java
+│   │   │               │
+│   │   │               ├── controller/              # API endpoints
+│   │   │               │   ├── ProductController.java
+│   │   │               │   ├── RoomController.java
+│   │   │               │   ├── CategoryController.java
+│   │   │               │   └── UserController.java
+│   │   │               │
+│   │   │               ├── exception/               # Exception handling
+│   │   │               │   └── GlobalExceptionHandler.java
+│   │   │               │
+│   │   │               └── util/                    # Utility classes
+│   │   │                   └── ValidationUtils.java
+│   │   │
+│   │   └── resources/
+│   │       ├── application.properties
+│   │       ├── static/                  # For static frontend assets
+│   │       │   ├── css/
+│   │       │   ├── js/
+│   │       │   └── images/
+│   │       │
+│   │       └── templates/               # For server-side templates (if needed)
+│   │
+│   └── test/                            # Unit and integration tests
+│       └── java/
+│           └── com/
+│               └── example/
+│                   └── inventory/
+│
+├── frontend/                            # Separate frontend application (optional)
+│   ├── public/
+│   ├── src/
+│   │   ├── components/
+│   │   ├── pages/
+│   │   ├── services/
+│   │   └── App.js
+│   │
+│   └── package.json
+│
+└── pom.xml                              # Project dependencies
