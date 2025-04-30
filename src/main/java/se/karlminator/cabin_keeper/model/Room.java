@@ -25,4 +25,40 @@ public class Room {
     public Room(String name){
         this.name = name;
     }
+
+    // Getters and Setters
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public List<Product> getProducts() {
+        return products;
+    }
+
+    public void setProducts(List<Product> products) {
+        this.products = products;
+    }
+
+    // Helper methods
+    public void addProduct(Product product) {
+        products.add(product);
+        product.setRoom(this);
+    }
+
+    public void removeProduct(Product product) {
+        products.remove(product);
+        product.setRoom(null);
+    }
 }
