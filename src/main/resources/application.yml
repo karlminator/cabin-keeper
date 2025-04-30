@@ -43,7 +43,8 @@ spring:
 
 ---
 # Produktionsmiljö
-# docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d --build || builds application and starts mysql and spring boot images
+# docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d --build
+# builds application and starts mysql and spring boot images
 spring:
   config:
     activate:
