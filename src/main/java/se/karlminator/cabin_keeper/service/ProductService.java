@@ -2,6 +2,7 @@ package se.karlminator.cabin_keeper.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import se.karlminator.cabin_keeper.error.ResourceNotFoundException;
 import se.karlminator.cabin_keeper.model.Product;
 import se.karlminator.cabin_keeper.model.Room;
 import se.karlminator.cabin_keeper.repository.ProductRepository;
@@ -23,8 +24,9 @@ public class ProductService {
         return productRepository.findAll();
     }
 
-    public Optional<Product> getProductById(Integer id) {
-        return productRepository.findById(id);
+    public Product getProductById(Integer id) {
+        return productRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Product not found with id: "+id));
     }
 
     public List<Product> getProductsByRoom(Room room) {
@@ -59,27 +61,27 @@ public class ProductService {
      * @param productDetails the updated product details
      * @return Optional containing the updated product, or empty if product doesn't exist
      */
-    public Optional<Product> updateProduct(Integer id, Product productDetails) {
-        return productRepository.findById(id)
-                .map(existingProduct -> {
-                    // Update the properties we want to allow updating
-                    existingProduct.setName(productDetails.getName());
-                    existingProduct.setDescription(productDetails.getDescription());
-                    existingProduct.setComment(productDetails.getComment());
-                    existingProduct.setStock(productDetails.getStock());
+    public Product updateProduct(Integer id, Product productDetails) {
+        Product existingProduct = productRepository.findById(id)
+                .orElseThrow(()-> new ResourceNotFoundException("Product not found with id: "+id));
 
-                    // Only update room if one is provided
-                    if (productDetails.getRoom() != null) {
-                        existingProduct.setRoom(productDetails.getRoom());
-                    }
+        // Update the properties we want to allow updating
+        existingProduct.setName(productDetails.getName());
+        existingProduct.setDescription(productDetails.getDescription());
+        existingProduct.setComment(productDetails.getComment());
+        existingProduct.setStock(productDetails.getStock());
 
-                    // Only update categories if provided
-                    if (productDetails.getCategories() != null && !productDetails.getCategories().isEmpty()) {
-                        existingProduct.setCategories(productDetails.getCategories());
-                    }
+        // Only update room if one is provided
+        if (productDetails.getRoom() != null) {
+            existingProduct.setRoom(productDetails.getRoom());
+        }
 
-                    return productRepository.save(existingProduct);
-                });
+        // Only update categories if provided
+        if (productDetails.getCategories() != null && !productDetails.getCategories().isEmpty()) {
+            existingProduct.setCategories(productDetails.getCategories());
+        }
+
+        return productRepository.save(existingProduct);
     }
 
     /**
@@ -88,27 +90,30 @@ public class ProductService {
      * @return true if product was deleted, false if it didn't exist
      */
     public boolean deleteProduct(Integer id) {
-        return productRepository.findById(id)
-                .map(product -> {
-                    productRepository.delete(product);
-                    return true;
-                })
-                .orElse(false);
+        try {
+            Product product = productRepository.findById(id)
+                    .orElseThrow(() -> new ResourceNotFoundException("Product not found with id: " + id));
+            productRepository.delete(product);
+            return true;
+        } catch (Exception ex) {
+            // TODO: implement logging
+            // Won't log now, but return false to indicate fault
+            return false;
+        }
     }
 
     /**
      * Updates the stock of a product
      * @param id the product ID
      * @param quantity the quantity to add (positive) or remove (negative)
-     * @return Optional containing the updated product, or empty if product doesn't exist
+     * @return Product containing the updated product, or trows exception if product doesn't exist
      */
-    public Optional<Product> updateStock(Integer id, Integer quantity) {
-        return productRepository.findById(id)
-                .map(product -> {
-                    int newStock = product.getStock() + quantity;
-                    // Ensure stock doesn't go below 0
-                    product.setStock(Math.max(0, newStock));
-                    return productRepository.save(product);
-                });
+    public Product updateStock(Integer id, Integer quantity) {
+        Product product = productRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Product not found with id: " + id));
+
+        int newStock = product.getStock() + quantity;
+        product.setStock(Math.max(0, newStock));
+        return productRepository.save(product);
     }
 }
