@@ -19,6 +19,7 @@ spring:
 # Loggningskonfiguration (gemensam för alla miljöer)
 logging:
   level:
+    root: INFO
     org.hibernate.SQL: DEBUG
     org.hibernate.type.descriptor.sql.BasicBinder: TRACE
     se.karlminator.cabin_keeper: DEBUG
