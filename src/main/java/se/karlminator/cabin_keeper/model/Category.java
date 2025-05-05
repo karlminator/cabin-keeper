@@ -1,5 +1,6 @@
 package se.karlminator.cabin_keeper.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.HashSet;
@@ -17,6 +18,7 @@ public class Category {
     private String name;
 
     @ManyToMany(mappedBy = "categories")
+    @JsonIgnore // TODO: remove after correctly implementing DTOs
     private Set<Product> products = new HashSet<>();
 
     //constructors

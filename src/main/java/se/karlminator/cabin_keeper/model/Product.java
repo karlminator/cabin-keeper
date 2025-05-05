@@ -1,5 +1,6 @@
 package se.karlminator.cabin_keeper.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.HashSet;
@@ -35,6 +36,7 @@ public class Product {
             joinColumns = @JoinColumn(name = "product_id"),
             inverseJoinColumns = @JoinColumn(name = "category_id")
     )
+    @JsonIgnore // TODO: remove after correctly implementing DTOs
     private Set<Category> categories = new HashSet<>();
 
     //constructors

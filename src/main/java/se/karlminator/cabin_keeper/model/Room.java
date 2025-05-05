@@ -1,5 +1,6 @@
 package se.karlminator.cabin_keeper.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
@@ -17,6 +18,7 @@ public class Room {
     private String name;
 
     @OneToMany(mappedBy = "room", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore // TODO: remove after correctly implementing DTOs
     private List<Product> products = new ArrayList<>();
 
     //constructors
