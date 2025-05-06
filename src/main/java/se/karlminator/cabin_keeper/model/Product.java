@@ -39,7 +39,7 @@ public class Product {
     @JsonIgnore // TODO: remove after correctly implementing DTOs
     private Set<Category> categories = new HashSet<>();
 
-    //constructors
+    // Constructors
     public Product(){}
 
     public Product(String name, String description, String comment, Integer stock){
