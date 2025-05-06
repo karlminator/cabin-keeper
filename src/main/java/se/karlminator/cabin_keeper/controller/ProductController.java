@@ -21,14 +21,10 @@ import java.util.List;
 public class ProductController {
 
     private final ProductService productService;
-    private final RoomService roomService;
-    private final CategoryService categoryService;
 
     @Autowired
-    public ProductController(ProductService productService, RoomService roomService, CategoryService categoryService) {
+    public ProductController(ProductService productService) {
         this.productService = productService;
-        this.roomService = roomService;
-        this.categoryService = categoryService;
     }
 
     // GET
