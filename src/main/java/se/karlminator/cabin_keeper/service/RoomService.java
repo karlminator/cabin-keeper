@@ -2,6 +2,7 @@ package se.karlminator.cabin_keeper.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import se.karlminator.cabin_keeper.error.ResourceNotFoundException;
 import se.karlminator.cabin_keeper.model.Room;
 import se.karlminator.cabin_keeper.repository.RoomRepository;
 
@@ -22,12 +23,9 @@ public class RoomService {
         return roomRepository.findAll();
     }
 
-    public Optional<Room> getRoomById(Integer id){
-        return roomRepository.findById(id);
-    }
-
-    public Optional<Room> getRoomByName(String name){
-        return roomRepository.findByName(name);
+    public Room getRoomById(Integer id){
+        return roomRepository.findById(id)
+                .orElseThrow(()-> new ResourceNotFoundException("Room not found with id: "+id));
     }
 
     public Room saveRoom(Room room){

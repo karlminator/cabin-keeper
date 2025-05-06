@@ -3,8 +3,10 @@ package se.karlminator.cabin_keeper.mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import se.karlminator.cabin_keeper.dto.ProductDTO;
+import se.karlminator.cabin_keeper.error.ResourceNotFoundException;
 import se.karlminator.cabin_keeper.model.Category;
 import se.karlminator.cabin_keeper.model.Product;
+import se.karlminator.cabin_keeper.model.Room;
 import se.karlminator.cabin_keeper.service.CategoryService;
 import se.karlminator.cabin_keeper.service.RoomService;
 
@@ -37,13 +39,26 @@ public class ProductMapper {
         p.setStock(dto.getStock() != null ? dto.getStock() : 0);
 
         if(dto.getRoomId() != null){
-            roomService.getRoomById(dto.getRoomId()).ifPresent(p::setRoom);
+            try{
+                Room room = roomService.getRoomById(dto.getRoomId());
+                p.setRoom(room);
+            } catch (ResourceNotFoundException e){
+                System.out.println(e.getMessage());
+                //TODO: add logging instead of console msg
+            }
         }
 
         if(dto.getCategoryIds() != null && !dto.getCategoryIds().isEmpty()){
             Set<Category> categories = new HashSet<>();
             for(Integer categoryId : dto.getCategoryIds()){
-                categoryService.getCategoryById(categoryId).ifPresent(categories::add);
+                try{
+                    Category category = categoryService.getCategoryById(categoryId);
+                    categories.add(category);
+
+                }catch (ResourceNotFoundException e){
+                    System.out.println(e.getMessage());
+                    //TODO: add logging instead of console msg
+                }
             }
             p.setCategories(categories);
         }
