@@ -13,7 +13,7 @@ import java.util.Optional;
 public interface ProductRepository extends JpaRepository<Product, Integer> {
 
     List<Product> findByNameContainingIgnoreCase(String name);
-    Optional<Product> findByName(String name);// TODO: clean up usage of Optional
+    List<Product> findByName(String name);
     List<Product> findByRoom(Room room);
     List<Product> findByRoomId(Integer roomId);
     List<Product> findByCategoriesId(Integer categoryId);

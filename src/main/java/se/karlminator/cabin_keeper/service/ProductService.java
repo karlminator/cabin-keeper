@@ -29,6 +29,10 @@ public class ProductService {
                 .orElseThrow(() -> new ResourceNotFoundException("Product not found with id: "+id));
     }
 
+    public List<Product> getProductByName(String name) {
+        return productRepository.findByName(name);
+    }
+
     public List<Product> getProductsByRoom(Room room) {
         return productRepository.findByRoom(room);
     }
