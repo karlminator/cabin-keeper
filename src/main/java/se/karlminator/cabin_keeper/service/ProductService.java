@@ -41,10 +41,6 @@ public class ProductService {
         return productRepository.findByCategoriesId(categoryId);
     }
 
-    public Product saveProduct(Product product) {
-        return productRepository.save(product);
-    }
-
     /**
      * Creates a new product if it doesn't exist yet
      * @param product the product to create
@@ -89,17 +85,8 @@ public class ProductService {
      * @param id the ID of the product to delete
      * @return true if product was deleted, false if it didn't exist
      */
-    public boolean deleteProduct(Integer id) {
-        try {
-            Product product = productRepository.findById(id)
-                    .orElseThrow(() -> new ResourceNotFoundException("Product not found with id: " + id));
-            productRepository.delete(product);
-            return true;
-        } catch (Exception ex) {
-            // TODO: implement logging
-            // Won't log now, but return false to indicate fault
-            return false;
-        }
+    public void deleteProduct(Integer id) {
+        productRepository.deleteById(id);
     }
 
     /**
