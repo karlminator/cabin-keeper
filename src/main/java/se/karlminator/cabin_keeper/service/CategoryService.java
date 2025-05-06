@@ -50,10 +50,17 @@ public class CategoryService {
         categoryRepository.deleteById(id);
     }
 
-    /**
-     * Removes a product from a category using the helper methods
-     * @return the updated category, or throws exception if not found
-     */
+    public void addProductToCategory(Integer categoryId, Integer productId) {
+        Category category = categoryRepository.findById(categoryId)
+                .orElseThrow(() -> new ResourceNotFoundException("Category not found with id: " + categoryId));
+
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new ResourceNotFoundException("Product not found with id: " + productId));
+
+        product.addCategory(category);
+        productRepository.save(product);
+    }
+
     public void removeProductFromCategory(Integer categoryId, Integer productId){
         Category category = categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new ResourceNotFoundException("Category not found with id: " + categoryId));

@@ -69,14 +69,9 @@ public class CategoryController {
     }
 
     @PostMapping("/{categoryId}/products/{productId}")
-    public ResponseEntity<Category> addProductToCategory(@PathVariable Integer categoryId, @PathVariable Integer productId){
-        Category category = categoryService.getCategoryById(categoryId);
-
-        Product product = productService.getProductById(productId);
-        product.addCategory(category);
-        productService.updateProduct(productId, product);
-
-        return ResponseEntity.ok(category);
+    public ResponseEntity<Void> addProductToCategory(@PathVariable Integer categoryId, @PathVariable Integer productId) {
+        categoryService.addProductToCategory(categoryId, productId);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @DeleteMapping("/{categoryId}/products/{productId}")
