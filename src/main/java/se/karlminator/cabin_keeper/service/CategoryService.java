@@ -28,16 +28,22 @@ public class CategoryService {
         return categoryRepository.findAll();
     }
 
-    public Optional<Category> getCategoryById(Integer id){
-        return categoryRepository.findById(id);
+    public Category getCategoryById(Integer id){
+        return categoryRepository.findById(id)
+                .orElseThrow(()-> new ResourceNotFoundException("Category not found with id: "+id));
     }
 
-    public Optional<Category> getCategoryByName(String name){
-        return categoryRepository.findByName(name);
-    }
-
-    public Category saveCategory(Category category){
+    public Category createCategory(Category category){
+        category.setId(null);
         return categoryRepository.save(category);
+    }
+
+    public Category updateCategory(Integer id, Category categoryDetails){
+        Category existingCategory = categoryRepository.findById(id)
+                .orElseThrow(()-> new ResourceNotFoundException("Category not found with id: " + id));
+
+        existingCategory.setName(categoryDetails.getName());
+        return categoryRepository.save(existingCategory);
     }
 
     public void deleteCategory(Integer id){
@@ -45,27 +51,10 @@ public class CategoryService {
     }
 
     /**
-     * Adds a product to a category using the helper methods
-     * @return the updated category, or throws exception if not found
-     */
-    public Category addProductToCategory(Integer categoryId, Integer productId) {
-        Category category = categoryRepository.findById(categoryId)
-                .orElseThrow(() -> new ResourceNotFoundException("Category not found with id: " + categoryId));
-
-        Product product = productRepository.findById(productId)
-                .orElseThrow(() -> new ResourceNotFoundException("Product not found with id: " + productId));
-
-        // Use the helper method to maintain bidirectional relationship
-        category.addProduct(product);
-
-        return categoryRepository.save(category);
-    }
-
-    /**
      * Removes a product from a category using the helper methods
      * @return the updated category, or throws exception if not found
      */
-    public Category removeProductFromCategory(Integer categoryId, Integer productId){
+    public void removeProductFromCategory(Integer categoryId, Integer productId){
         Category category = categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new ResourceNotFoundException("Category not found with id: " + categoryId));
 
@@ -74,20 +63,11 @@ public class CategoryService {
 
         // Remove product with helper method in category entity.
         category.removeProduct(product);
+        product.removeCategory(category);
 
-        return categoryRepository.save(category);
-    }
-
-    /**
-     * Gets all products in a category, or throws exception if no such category
-     * @return list of products in the category
-     */
-
-    public List<Product> getProductsInCategory(Integer categoryId){
-        Category category = categoryRepository.findById(categoryId)
-                .orElseThrow(()-> new ResourceNotFoundException("Category not found with id: "+categoryId));
-
-        return new ArrayList<>(category.getProducts());
+        // As Product owns this relation, we will save from the owning side.
+        // return categoryRepository.save(category); -- Old code ❌
+        productRepository.save(product); // -- New code ✅
     }
 }
 
