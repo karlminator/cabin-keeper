@@ -10,7 +10,6 @@ import se.karlminator.cabin_keeper.service.CategoryService;
 import se.karlminator.cabin_keeper.service.ProductService;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/categories")
