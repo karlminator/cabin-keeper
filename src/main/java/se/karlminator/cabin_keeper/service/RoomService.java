@@ -28,8 +28,17 @@ public class RoomService {
                 .orElseThrow(()-> new ResourceNotFoundException("Room not found with id: "+id));
     }
 
-    public Room saveRoom(Room room){
+    public Room createRoom(Room room){
+        room.setId(null);
         return roomRepository.save(room);
+    }
+
+    public Room updateRoom(Integer id, Room roomDetails){
+        Room existingRoom = roomRepository.findById(id)
+                .orElseThrow(()-> new ResourceNotFoundException("Room not found with id: "+id));
+
+        existingRoom.setName(roomDetails.getName());
+        return roomRepository.save(existingRoom);
     }
 
     public void deleteRoom(Integer id){
