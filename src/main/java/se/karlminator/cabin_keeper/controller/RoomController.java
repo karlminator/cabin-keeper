@@ -50,8 +50,12 @@ public class RoomController {
     // DELETE
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteRoom(@PathVariable Integer id){
-        roomService.deleteRoom(id);
-        return ResponseEntity.noContent().build();
+        boolean success = roomService.deleteRoom(id);
+        if (success){
+            return ResponseEntity.noContent().build();
+        } else{
+            return ResponseEntity.notFound().build();
+        }
     }
 
 }

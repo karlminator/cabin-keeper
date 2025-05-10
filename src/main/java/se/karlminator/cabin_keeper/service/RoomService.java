@@ -41,7 +41,11 @@ public class RoomService {
         return roomRepository.save(existingRoom);
     }
 
-    public void deleteRoom(Integer id){
-        roomRepository.deleteById(id);
+    public boolean deleteRoom(Integer id){
+        if (roomRepository.existsById(id)) {
+            roomRepository.deleteById(id);
+            return true;
+        }
+        return false;
     }
 }
