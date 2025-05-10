@@ -84,13 +84,12 @@ public class ProductService {
         return productRepository.save(existingProduct);
     }
 
-    /**
-     * Deletes a product if it exists
-     * @param id the ID of the product to delete
-     * @return true if product was deleted, false if it didn't exist
-     */
-    public void deleteProduct(Integer id) {
-        productRepository.deleteById(id);
+    public boolean deleteProduct(Integer id) {
+        if(productRepository.existsById(id)){
+            productRepository.deleteById(id);
+            return true;
+        }
+        return false;
     }
 
     /**

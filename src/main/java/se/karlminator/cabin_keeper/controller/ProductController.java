@@ -6,6 +6,7 @@ import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.*;
 import se.karlminator.cabin_keeper.error.ErrorResponse;
 import se.karlminator.cabin_keeper.model.Product;
@@ -75,7 +76,11 @@ public class ProductController {
     // DELETE
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteProduct(@PathVariable Integer id){
-        productService.deleteProduct(id);
-        return ResponseEntity.noContent().build();
+        boolean success = productService.deleteProduct(id);
+        if (success){
+            return ResponseEntity.noContent().build();
+        }else{
+            return ResponseEntity.notFound().build();
+        }
     }
 }
