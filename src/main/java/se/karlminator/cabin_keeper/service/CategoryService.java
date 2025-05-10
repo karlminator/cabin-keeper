@@ -46,8 +46,12 @@ public class CategoryService {
         return categoryRepository.save(existingCategory);
     }
 
-    public void deleteCategory(Integer id){
+    public boolean deleteCategory(Integer id){
+        if (categoryRepository.existsById(id)) {
         categoryRepository.deleteById(id);
+        return true;
+        }
+        return false;
     }
 
     public void addProductToCategory(Integer categoryId, Integer productId) {
