@@ -1,13 +1,17 @@
 package se.karlminator.cabin_keeper.controller;
 
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import se.karlminator.cabin_keeper.dto.RoomDTO;
+import se.karlminator.cabin_keeper.mapper.RoomMapper;
 import se.karlminator.cabin_keeper.model.Room;
 import se.karlminator.cabin_keeper.service.RoomService;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/rooms")
@@ -15,22 +19,28 @@ import java.util.List;
 public class RoomController {
 
     private final RoomService roomService;
+    private final RoomMapper roomMapper;
 
     @Autowired
-    public RoomController(RoomService roomService){
+    public RoomController(RoomService roomService, RoomMapper roomMapper) {
         this.roomService = roomService;
+        this.roomMapper = roomMapper;
     }
 
     // GET
     @GetMapping
-    public ResponseEntity<List<Room>> getAllRooms(){
+    public ResponseEntity<List<RoomDTO>> getAllRooms() {
         List<Room> rooms = roomService.getAllRooms();
-        return ResponseEntity.ok(rooms);
+        List<RoomDTO> roomDTOs = rooms.stream()
+                .map(roomMapper::toDto)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(roomDTOs);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Room> getRoomById(@PathVariable Integer id){
-        return ResponseEntity.ok(roomService.getRoomById(id));
+    public ResponseEntity<RoomDTO> getRoomById(@PathVariable Integer id) {
+        Room room = roomService.getRoomById(id);
+        return ResponseEntity.ok(roomMapper.toDto(room));
     }
 
     // POST
@@ -42,9 +52,10 @@ public class RoomController {
 
     // PUT
     @PutMapping("/{id}")
-    public ResponseEntity<Room> updateRoom(@PathVariable Integer id, @RequestBody Room room){
+    public ResponseEntity<RoomDTO> updateRoom(@PathVariable Integer id, @Valid @RequestBody RoomDTO roomDTO){
+        Room room = roomMapper.toEntity(roomDTO);
         Room updatedRoom = roomService.updateRoom(id, room);
-        return ResponseEntity.ok(updatedRoom);
+        return ResponseEntity.ok(roomMapper.toDto(updatedRoom));
     }
 
     // DELETE

@@ -19,6 +19,15 @@ public class RoomService {
         this.roomRepository = roomRepository;
     }
 
+    public List<Room> getAllRoomsWithProducts() {
+        return roomRepository.findAllWithProducts();
+    }
+
+    public Room getRoomByIdWithProducts(Integer id) {
+        return roomRepository.findByIdWithProducts(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Room not found with id: " + id));
+    }
+
     public List<Room> getAllRooms(){
         return roomRepository.findAll();
     }
