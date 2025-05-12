@@ -6,7 +6,7 @@ import jakarta.validation.constraints.Size;
 import java.util.HashSet;
 import java.util.Set;
 
-public class ProductDTO extends ProductBriefDTO{
+public class ProductDTO extends ProductSlimDTO {
 
     @Size(max = 1000, message = "Description cannot exceed 1000 characters")
     private String description;
@@ -17,9 +17,9 @@ public class ProductDTO extends ProductBriefDTO{
     @Min(value = 0, message = "Stock cannot be negative")
     private Integer stock;
 
-    private RoomBriefDTO room;
+    private RoomSlimDTO room;
 
-    private Set<CategoryBriefDTO> categories = new HashSet<>();
+    private Set<CategorySlimDTO> categories = new HashSet<>();
 
     // Constructors
     public ProductDTO(){}
@@ -57,19 +57,19 @@ public class ProductDTO extends ProductBriefDTO{
         this.stock = stock;
     }
 
-    public RoomBriefDTO getRoom() {
+    public RoomSlimDTO getRoom() {
         return room;
     }
 
-    public void setRoom(RoomBriefDTO room) {
+    public void setRoom(RoomSlimDTO room) {
         this.room = room;
     }
 
-    public Set<CategoryBriefDTO> getCategories() {
+    public Set<CategorySlimDTO> getCategories() {
         return categories;
     }
 
-    public void setCategories(Set<CategoryBriefDTO> categories) {
+    public void setCategories(Set<CategorySlimDTO> categories) {
         this.categories = categories;
     }
 }

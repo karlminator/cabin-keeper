@@ -1,14 +1,11 @@
 package se.karlminator.cabin_keeper.dto;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
-
 import java.util.HashSet;
 import java.util.Set;
 
-public class CategoryDTO  extends CategoryBriefDTO{
+public class CategoryDTO  extends CategorySlimDTO {
 
-    private Set<ProductBriefDTO> products = new HashSet<>();
+    private Set<ProductSlimDTO> products = new HashSet<>();
 
     public CategoryDTO(){}
 
@@ -16,11 +13,11 @@ public class CategoryDTO  extends CategoryBriefDTO{
         super(id, name);
     }
 
-    public Set<ProductBriefDTO> getProducts() {
+    public Set<ProductSlimDTO> getProducts() {
         return products;
     }
 
-    public void setProducts(Set<ProductBriefDTO> products) {
+    public void setProducts(Set<ProductSlimDTO> products) {
         this.products = products;
     }
 }

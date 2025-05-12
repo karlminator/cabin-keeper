@@ -3,19 +3,18 @@ package se.karlminator.cabin_keeper.dto;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
-public class ProductBriefDTO {
+public class RoomSlimDTO {
     private Integer id;
 
-    @NotBlank(message = "Product name is required")
-    @Size(max = 255, message = "Product name cannot exceed 255 characters")
+    @NotBlank(message = "Room name is required")
+    @Size(max = 255, message = "Room name cannot exceed 255 characters")
     private String name;
 
-    public ProductBriefDTO() {
-    }
+    public RoomSlimDTO(){}
 
-    public ProductBriefDTO(Integer id, String name) {
+    public RoomSlimDTO(Integer id, String name){
         this.id = id;
-        this.name = name;
+        this.name=name;
     }
 
     public Integer getId() {

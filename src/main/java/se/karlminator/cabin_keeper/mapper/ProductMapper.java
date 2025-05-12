@@ -51,7 +51,7 @@ public class ProductMapper {
 
         if(dto.getCategories() != null && !dto.getCategories().isEmpty()){
             Set<Category> categories = new HashSet<>();
-            for(CategoryBriefDTO categoryDTO : dto.getCategories()){
+            for(CategorySlimDTO categoryDTO : dto.getCategories()){
                 if (categoryDTO.getId() != null){
                     try{
                         Category category = categoryService.getCategoryById(categoryDTO.getId());
@@ -83,7 +83,7 @@ public class ProductMapper {
         dto.setStock(product.getStock());
 
         if(product.getRoom() != null){
-            RoomBriefDTO roomDTO = new RoomBriefDTO();
+            RoomSlimDTO roomDTO = new RoomSlimDTO();
 
             roomDTO.setId(product.getRoom().getId());
             roomDTO.setName(product.getRoom().getName());
@@ -94,8 +94,8 @@ public class ProductMapper {
         if(product.getCategories() != null
                 && Hibernate.isInitialized(product.getCategories())
                 && !product.getCategories().isEmpty()){
-          Set<CategoryBriefDTO> categoryDTOs = product.getCategories().stream()
-                  .map(category -> new CategoryBriefDTO(category.getId(), category.getName()))
+          Set<CategorySlimDTO> categoryDTOs = product.getCategories().stream()
+                  .map(category -> new CategorySlimDTO(category.getId(), category.getName()))
                   .collect(Collectors.toSet());
           dto.setCategories(categoryDTOs);
         }
