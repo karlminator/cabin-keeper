@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface RoomRepository extends JpaRepository<Room, Integer> {
-    @Query("SELECT DISTINCT r FROM room r LEFT JOIN FETCH r.products")
+    @Query("SELECT DISTINCT r FROM Room r LEFT JOIN FETCH r.products")
     List<Room> findAllWithProducts();
 
     @Query("SELECT r FROM Room r LEFT JOIN FETCH r.products WHERE r.id = :id")
