@@ -18,7 +18,6 @@ public class Room {
     private String name;
 
     @OneToMany(mappedBy = "room", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnore // TODO: remove after correctly implementing DTOs
     private List<Product> products = new ArrayList<>();
 
     //constructors
