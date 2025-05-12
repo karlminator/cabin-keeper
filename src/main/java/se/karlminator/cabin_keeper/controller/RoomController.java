@@ -30,7 +30,7 @@ public class RoomController {
     // GET
     @GetMapping
     public ResponseEntity<List<RoomDTO>> getAllRooms() {
-        List<Room> rooms = roomService.getAllRooms();
+        List<Room> rooms = roomService.getAllRoomsWithProducts();
         List<RoomDTO> roomDTOs = rooms.stream()
                 .map(roomMapper::toDto)
                 .collect(Collectors.toList());
@@ -39,7 +39,7 @@ public class RoomController {
 
     @GetMapping("/{id}")
     public ResponseEntity<RoomDTO> getRoomById(@PathVariable Integer id) {
-        Room room = roomService.getRoomById(id);
+        Room room = roomService.getRoomByIdWithProducts(id);
         return ResponseEntity.ok(roomMapper.toDto(room));
     }
 

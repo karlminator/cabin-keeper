@@ -37,7 +37,7 @@ public class CategoryController {
     // GET
     @GetMapping
     public ResponseEntity<List<CategoryDTO>> getAllCategories(){
-        List<Category> categories = categoryService.getAllCategories();
+        List<Category> categories = categoryService.getAllCategoriesWithProducts();
         List<CategoryDTO> categoriesDTOs = categories.stream()
                 .map(categoryMapper::toDto)
                 .collect(Collectors.toList());
@@ -46,7 +46,7 @@ public class CategoryController {
 
     @GetMapping("/{id}")
     public ResponseEntity<CategoryDTO> getCategoryById(@PathVariable Integer id){
-        Category category = categoryService.getCategoryById(id);
+        Category category = categoryService.getCategoryByIdWithProducts(id);
         return ResponseEntity.ok(categoryMapper.toDto(category));
     }
 

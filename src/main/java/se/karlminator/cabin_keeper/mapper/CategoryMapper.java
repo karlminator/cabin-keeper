@@ -1,18 +1,17 @@
 package se.karlminator.cabin_keeper.mapper;
 
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import se.karlminator.cabin_keeper.dto.CategoryDTO;
+import se.karlminator.cabin_keeper.dto.ProductSummaryDTO;
 import se.karlminator.cabin_keeper.model.Category;
+
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Component
 public class CategoryMapper {
-    private final ProductMapper productMapper;
-
-    @Autowired
-    public CategoryMapper(ProductMapper productMapper) {
-        this.productMapper = productMapper;
-    }
 
     public Category toEntity(CategoryDTO dto){
         if (dto == null){
@@ -34,6 +33,16 @@ public class CategoryMapper {
         CategoryDTO dto = new CategoryDTO();
         dto.setId(category.getId());
         dto.setName(category.getName());
+
+        if(category.getProducts() != null
+                && Hibernate.isInitialized(category.getProducts())
+                && !category.getProducts().isEmpty()){
+
+            Set<ProductSummaryDTO> productDTOs = category.getProducts().stream()
+                    .map(product -> new ProductSummaryDTO(product.getId(), product.getName()))
+                    .collect(Collectors.toSet());
+            dto.setProducts(productDTOs);
+        }
 
         return dto;
     }

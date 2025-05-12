@@ -3,12 +3,17 @@ package se.karlminator.cabin_keeper.dto;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
+import java.util.HashSet;
+import java.util.Set;
+
 public class RoomDTO {
     private Integer id;
 
     @NotBlank(message = "Room name is required")
     @Size(max = 255, message = "Room name cannot exceed 255 characters")
     private String name;
+
+    private Set<ProductSummaryDTO> products = new HashSet<>();
 
     public RoomDTO(){}
 
@@ -31,5 +36,13 @@ public class RoomDTO {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Set<ProductSummaryDTO> getProducts() {
+        return products;
+    }
+
+    public void setProducts(Set<ProductSummaryDTO> products) {
+        this.products = products;
     }
 }
