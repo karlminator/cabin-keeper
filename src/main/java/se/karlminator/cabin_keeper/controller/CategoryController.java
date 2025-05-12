@@ -52,9 +52,10 @@ public class CategoryController {
 
     // POST
     @PostMapping
-    public ResponseEntity<Category> createCategory(@RequestBody Category category){
+    public ResponseEntity<CategoryDTO> createCategory(@RequestBody CategoryDTO categoryDTO){
+        Category category = categoryMapper.toEntity(categoryDTO);
         Category newCategory = categoryService.createCategory(category);
-        return ResponseEntity.status(HttpStatus.CREATED).body(newCategory);
+        return ResponseEntity.status(HttpStatus.CREATED).body(categoryMapper.toDto(newCategory));
     }
 
     // PUT

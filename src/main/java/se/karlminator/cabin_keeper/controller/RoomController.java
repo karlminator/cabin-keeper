@@ -45,9 +45,10 @@ public class RoomController {
 
     // POST
     @PostMapping
-    public ResponseEntity<Room> createRoom(@RequestBody Room room){
+    public ResponseEntity<RoomDTO> createRoom(@RequestBody RoomDTO roomDTO){
+        Room room = roomMapper.toEntity(roomDTO);
         Room newRoom = roomService.createRoom(room);
-        return ResponseEntity.status(HttpStatus.CREATED).body(newRoom);
+        return ResponseEntity.status(HttpStatus.CREATED).body(roomMapper.toDto(newRoom));
     }
 
     // PUT
