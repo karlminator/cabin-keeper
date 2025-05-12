@@ -1,40 +1,53 @@
 package se.karlminator.cabin_keeper.controller;
 
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import se.karlminator.cabin_keeper.dto.CategoryDTO;
+import se.karlminator.cabin_keeper.mapper.CategoryMapper;
+import se.karlminator.cabin_keeper.mapper.ProductMapper;
 import se.karlminator.cabin_keeper.model.Category;
 import se.karlminator.cabin_keeper.model.Product;
 import se.karlminator.cabin_keeper.service.CategoryService;
 import se.karlminator.cabin_keeper.service.ProductService;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/categories")
 @CrossOrigin(origins = "*") // TODO: setup configuration
 public class CategoryController {
-
     private final CategoryService categoryService;
     private final ProductService productService;
+    private final CategoryMapper categoryMapper;
+    private final ProductMapper productMapper;
 
     @Autowired
-    public CategoryController(CategoryService categoryService, ProductService productService){
+    public CategoryController(CategoryService categoryService, ProductService productService,
+                              CategoryMapper categoryMapper, ProductMapper productMapper){
         this.categoryService = categoryService;
         this.productService = productService;
+        this.categoryMapper = categoryMapper;
+        this.productMapper = productMapper;
     }
 
     // GET
     @GetMapping
-    public ResponseEntity<List<Category>> getAllCategories(){
+    public ResponseEntity<List<CategoryDTO>> getAllCategories(){
         List<Category> categories = categoryService.getAllCategories();
-        return ResponseEntity.ok(categories);
+        List<CategoryDTO> categoriesDTOs = categories.stream()
+                .map(categoryMapper::toDto)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(categoriesDTOs);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Category> getCategoryById(@PathVariable Integer id){
-        return ResponseEntity.ok(categoryService.getCategoryById(id));
+    public ResponseEntity<CategoryDTO> getCategoryById(@PathVariable Integer id){
+        Category category = categoryService.getCategoryById(id);
+        return ResponseEntity.ok(categoryMapper.toDto(category));
     }
 
     // POST
@@ -46,9 +59,10 @@ public class CategoryController {
 
     // PUT
     @PutMapping("/{id}")
-    public ResponseEntity<Category> updateCategory(@PathVariable Integer id, @RequestBody Category category){
+    public ResponseEntity<CategoryDTO> updateCategory(@PathVariable Integer id, @Valid @RequestBody CategoryDTO categoryDTO){
+        Category category = categoryMapper.toEntity(categoryDTO);
         Category updatedCategory = categoryService.updateCategory(id, category);
-        return ResponseEntity.ok(updatedCategory);
+        return ResponseEntity.ok(categoryMapper.toDto(updatedCategory));
 
     }
 

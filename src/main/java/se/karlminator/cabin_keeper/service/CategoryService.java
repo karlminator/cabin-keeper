@@ -24,6 +24,15 @@ public class CategoryService {
         this.productRepository = productRepository;
     }
 
+    public List<Category> getAllCategoriesWithProducts(){
+        return categoryRepository.findAllWithProducts();
+    }
+
+    public Category getCategoryByIdWithProducts(Integer id){
+        return categoryRepository.findByIdWithProducts(id)
+                .orElseThrow(()-> new ResourceNotFoundException("Category not found with id: "+id));
+    }
+
     public List<Category> getAllCategories(){
         return categoryRepository.findAll();
     }
