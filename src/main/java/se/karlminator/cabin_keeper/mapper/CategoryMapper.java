@@ -6,6 +6,8 @@ import se.karlminator.cabin_keeper.dto.CategoryDTO;
 import se.karlminator.cabin_keeper.dto.ProductSlimDTO;
 import se.karlminator.cabin_keeper.model.Category;
 
+import java.util.Comparator;
+import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -39,7 +41,8 @@ public class CategoryMapper {
 
             Set<ProductSlimDTO> productDTOs = category.getProducts().stream()
                     .map(product -> new ProductSlimDTO(product.getId(), product.getName()))
-                    .collect(Collectors.toSet());
+                    .sorted(Comparator.comparing(ProductSlimDTO::getId))
+                    .collect(Collectors.toCollection(LinkedHashSet::new));
             dto.setProducts(productDTOs);
         }
 
