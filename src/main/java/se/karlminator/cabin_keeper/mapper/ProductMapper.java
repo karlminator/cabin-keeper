@@ -3,9 +3,7 @@ package se.karlminator.cabin_keeper.mapper;
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import se.karlminator.cabin_keeper.dto.CategoryDTO;
-import se.karlminator.cabin_keeper.dto.ProductDTO;
-import se.karlminator.cabin_keeper.dto.RoomDTO;
+import se.karlminator.cabin_keeper.dto.*;
 import se.karlminator.cabin_keeper.error.ResourceNotFoundException;
 import se.karlminator.cabin_keeper.model.Category;
 import se.karlminator.cabin_keeper.model.Product;
@@ -53,7 +51,7 @@ public class ProductMapper {
 
         if(dto.getCategories() != null && !dto.getCategories().isEmpty()){
             Set<Category> categories = new HashSet<>();
-            for(CategoryDTO categoryDTO : dto.getCategories()){
+            for(CategoryBriefDTO categoryDTO : dto.getCategories()){
                 if (categoryDTO.getId() != null){
                     try{
                         Category category = categoryService.getCategoryById(categoryDTO.getId());
@@ -85,7 +83,7 @@ public class ProductMapper {
         dto.setStock(product.getStock());
 
         if(product.getRoom() != null){
-            RoomDTO roomDTO = new RoomDTO();
+            RoomBriefDTO roomDTO = new RoomBriefDTO();
 
             roomDTO.setId(product.getRoom().getId());
             roomDTO.setName(product.getRoom().getName());
@@ -96,8 +94,8 @@ public class ProductMapper {
         if(product.getCategories() != null
                 && Hibernate.isInitialized(product.getCategories())
                 && !product.getCategories().isEmpty()){
-          Set<CategoryDTO> categoryDTOs = product.getCategories().stream()
-                  .map(category -> new CategoryDTO(category.getId(), category.getName()))
+          Set<CategoryBriefDTO> categoryDTOs = product.getCategories().stream()
+                  .map(category -> new CategoryBriefDTO(category.getId(), category.getName()))
                   .collect(Collectors.toSet());
           dto.setCategories(categoryDTOs);
         }

@@ -2,7 +2,7 @@ package se.karlminator.cabin_keeper.mapper;
 
 import org.hibernate.Hibernate;
 import org.springframework.stereotype.Component;
-import se.karlminator.cabin_keeper.dto.ProductSummaryDTO;
+import se.karlminator.cabin_keeper.dto.ProductBriefDTO;
 import se.karlminator.cabin_keeper.dto.RoomDTO;
 import se.karlminator.cabin_keeper.model.Room;
 
@@ -37,8 +37,8 @@ public class RoomMapper {
                 && Hibernate.isInitialized(room.getProducts())
                 && !room.getProducts().isEmpty()){
 
-            Set<ProductSummaryDTO> productDTOs = room.getProducts().stream()
-                    .map(product -> new ProductSummaryDTO(product.getId(), product.getName()))
+            Set<ProductBriefDTO> productDTOs = room.getProducts().stream()
+                    .map(product -> new ProductBriefDTO(product.getId(), product.getName()))
                     .collect(Collectors.toSet());
             dto.setProducts(productDTOs);
         }

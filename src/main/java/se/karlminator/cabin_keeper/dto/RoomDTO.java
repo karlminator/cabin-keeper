@@ -6,43 +6,21 @@ import jakarta.validation.constraints.Size;
 import java.util.HashSet;
 import java.util.Set;
 
-public class RoomDTO {
-    private Integer id;
+public class RoomDTO extends RoomBriefDTO {
 
-    @NotBlank(message = "Room name is required")
-    @Size(max = 255, message = "Room name cannot exceed 255 characters")
-    private String name;
-
-    private Set<ProductSummaryDTO> products = new HashSet<>();
+    private Set<ProductBriefDTO> products = new HashSet<>();
 
     public RoomDTO(){}
 
     public RoomDTO(Integer id, String name){
-        this.id = id;
-        this.name = name;
+        super(id, name);
     }
 
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Set<ProductSummaryDTO> getProducts() {
+    public Set<ProductBriefDTO> getProducts() {
         return products;
     }
 
-    public void setProducts(Set<ProductSummaryDTO> products) {
+    public void setProducts(Set<ProductBriefDTO> products) {
         this.products = products;
     }
 }

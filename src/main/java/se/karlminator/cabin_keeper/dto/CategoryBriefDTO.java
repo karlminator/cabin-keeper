@@ -1,13 +1,18 @@
 package se.karlminator.cabin_keeper.dto;
 
-public class ProductSummaryDTO {
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+
+public class CategoryBriefDTO {
     private Integer id;
+
+    @NotBlank(message = "Category name is required")
+    @Size(max = 255, message = "Category name cannot exceed 255 characters")
     private String name;
 
-    public ProductSummaryDTO() {
-    }
+    public CategoryBriefDTO(){}
 
-    public ProductSummaryDTO(Integer id, String name) {
+    public CategoryBriefDTO(Integer id, String name){
         this.id = id;
         this.name = name;
     }

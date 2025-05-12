@@ -1,18 +1,12 @@
 package se.karlminator.cabin_keeper.dto;
 
 import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
 import java.util.HashSet;
 import java.util.Set;
 
-public class ProductDTO {
-    private Integer id;
-
-    @NotBlank(message = "Product name is required")
-    @Size(max = 255, message = "Product name cannot exceed 255 characters")
-    private String name;
+public class ProductDTO extends ProductBriefDTO{
 
     @Size(max = 1000, message = "Description cannot exceed 1000 characters")
     private String description;
@@ -23,39 +17,22 @@ public class ProductDTO {
     @Min(value = 0, message = "Stock cannot be negative")
     private Integer stock;
 
-    private RoomDTO room;
+    private RoomBriefDTO room;
 
-    private Set<CategoryDTO> categories = new HashSet<>();
+    private Set<CategoryBriefDTO> categories = new HashSet<>();
 
     // Constructors
     public ProductDTO(){}
 
     public ProductDTO(Integer id, String name, String description, String comment,
                       Integer stock){
-        this.id = id;
-        this.name = name;
+        super(id, name);
         this.description = description;
         this.comment = comment;
         this.stock = stock;
     }
 
     // Getters and Setters
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public String getDescription() {
         return description;
     }
@@ -80,19 +57,19 @@ public class ProductDTO {
         this.stock = stock;
     }
 
-    public RoomDTO getRoom() {
+    public RoomBriefDTO getRoom() {
         return room;
     }
 
-    public void setRoom(RoomDTO room) {
+    public void setRoom(RoomBriefDTO room) {
         this.room = room;
     }
 
-    public Set<CategoryDTO> getCategories() {
+    public Set<CategoryBriefDTO> getCategories() {
         return categories;
     }
 
-    public void setCategories(Set<CategoryDTO> categories) {
+    public void setCategories(Set<CategoryBriefDTO> categories) {
         this.categories = categories;
     }
 }

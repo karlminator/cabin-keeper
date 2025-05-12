@@ -1,10 +1,9 @@
 package se.karlminator.cabin_keeper.mapper;
 
 import org.hibernate.Hibernate;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import se.karlminator.cabin_keeper.dto.CategoryDTO;
-import se.karlminator.cabin_keeper.dto.ProductSummaryDTO;
+import se.karlminator.cabin_keeper.dto.ProductBriefDTO;
 import se.karlminator.cabin_keeper.model.Category;
 
 import java.util.Set;
@@ -38,8 +37,8 @@ public class CategoryMapper {
                 && Hibernate.isInitialized(category.getProducts())
                 && !category.getProducts().isEmpty()){
 
-            Set<ProductSummaryDTO> productDTOs = category.getProducts().stream()
-                    .map(product -> new ProductSummaryDTO(product.getId(), product.getName()))
+            Set<ProductBriefDTO> productDTOs = category.getProducts().stream()
+                    .map(product -> new ProductBriefDTO(product.getId(), product.getName()))
                     .collect(Collectors.toSet());
             dto.setProducts(productDTOs);
         }
