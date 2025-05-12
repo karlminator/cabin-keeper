@@ -20,6 +20,15 @@ public class ProductService {
         this.productRepository = productRepository;
     }
 
+    public List<Product> getAllProductsWithDetails(){
+        return productRepository.findAllWithRoomAndCategories();
+    }
+
+    public Product getProductByIdWithDetails(Integer id){
+        return productRepository.findByIdWithRoomAndCategories(id)
+                .orElseThrow(()-> new ResourceNotFoundException("Product not found with id: "+id));
+    }
+
     public List<Product> getAllProducts() {
         return productRepository.findAll();
     }
@@ -33,10 +42,6 @@ public class ProductService {
         return productRepository.findByName(name);
     }
 
-    public List<Product> getProductsByRoom(Room room) {
-        return productRepository.findByRoom(room);
-    }
-
     public List<Product> getProductsByRoomId(Integer roomId) {
         return productRepository.findByRoomId(roomId);
     }
@@ -45,22 +50,12 @@ public class ProductService {
         return productRepository.findByCategoriesId(categoryId);
     }
 
-    /**
-     * Creates a new product if it doesn't exist yet
-     * @param product the product to create
-     * @return the saved product
-     */
     public Product createProduct(Product product) {
         product.setId(null); // Set ID to null to ensure a new entity is created
         return productRepository.save(product);
     }
 
-    /**
-     * Updates an existing product if it exists
-     * @param id the ID of the product to update
-     * @param productDetails the updated product details
-     * @return Optional containing the updated product, or empty if product doesn't exist
-     */
+
     public Product updateProduct(Integer id, Product productDetails) {
         Product existingProduct = productRepository.findById(id)
                 .orElseThrow(()-> new ResourceNotFoundException("Product not found with id: "+id));
@@ -92,12 +87,6 @@ public class ProductService {
         return false;
     }
 
-    /**
-     * Updates the stock of a product
-     * @param id the product ID
-     * @param quantity the quantity to add (positive) or remove (negative)
-     * @return Product containing the updated product, or trows exception if product doesn't exist
-     */
     public Product updateStock(Integer id, Integer quantity) {
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Product not found with id: " + id));

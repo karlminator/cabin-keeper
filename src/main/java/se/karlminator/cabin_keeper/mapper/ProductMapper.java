@@ -1,8 +1,11 @@
 package se.karlminator.cabin_keeper.mapper;
 
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import se.karlminator.cabin_keeper.dto.CategoryDTO;
 import se.karlminator.cabin_keeper.dto.ProductDTO;
+import se.karlminator.cabin_keeper.dto.RoomDTO;
 import se.karlminator.cabin_keeper.error.ResourceNotFoundException;
 import se.karlminator.cabin_keeper.model.Category;
 import se.karlminator.cabin_keeper.model.Product;
@@ -38,26 +41,28 @@ public class ProductMapper {
         p.setComment(dto.getComment());
         p.setStock(dto.getStock() != null ? dto.getStock() : 0);
 
-        if(dto.getRoomId() != null){
+        if(dto.getRoom() != null && dto.getRoom().getId() != null){
             try{
-                Room room = roomService.getRoomById(dto.getRoomId());
+                Room room = roomService.getRoomById(dto.getRoom().getId());
                 p.setRoom(room);
             } catch (ResourceNotFoundException e){
-                System.out.println(e.getMessage());
                 //TODO: add logging instead of console msg
+                System.out.println(e.getMessage());
             }
         }
 
-        if(dto.getCategoryIds() != null && !dto.getCategoryIds().isEmpty()){
+        if(dto.getCategories() != null && !dto.getCategories().isEmpty()){
             Set<Category> categories = new HashSet<>();
-            for(Integer categoryId : dto.getCategoryIds()){
-                try{
-                    Category category = categoryService.getCategoryById(categoryId);
-                    categories.add(category);
+            for(CategoryDTO categoryDTO : dto.getCategories()){
+                if (categoryDTO.getId() != null){
+                    try{
+                        Category category = categoryService.getCategoryById(categoryDTO.getId());
+                        categories.add(category);
 
-                }catch (ResourceNotFoundException e){
-                    System.out.println(e.getMessage());
-                    //TODO: add logging instead of console msg
+                    }catch (ResourceNotFoundException e){
+                        //TODO: add logging instead of console msg
+                        System.out.println(e.getMessage());
+                    }
                 }
             }
             p.setCategories(categories);
@@ -66,31 +71,35 @@ public class ProductMapper {
         return p;
     }
 
-    public ProductDTO toDto(Product e){
-        if (e == null){
+    public ProductDTO toDto(Product product){
+        if (product == null){
             return null;
         }
 
         ProductDTO dto = new ProductDTO();
-        dto.setId(e.getId());
-        dto.setName(e.getName());
-        dto.setDescription(e.getDescription());
-        dto.setComment(e.getComment());
-        dto.setStock(e.getStock());
 
-        if(e.getRoom() != null){
-            dto.setRoomId(e.getRoom().getId());
-            dto.setRoomName(e.getRoom().getName());
+        dto.setId(product.getId());
+        dto.setName(product.getName());
+        dto.setDescription(product.getDescription());
+        dto.setComment(product.getComment());
+        dto.setStock(product.getStock());
+
+        if(product.getRoom() != null){
+            RoomDTO roomDTO = new RoomDTO();
+
+            roomDTO.setId(product.getRoom().getId());
+            roomDTO.setName(product.getRoom().getName());
+
+            dto.setRoom(roomDTO);
         }
 
-        if(e.getCategories() != null && !e.getCategories().isEmpty()){
-            dto.setCategoryIds(e.getCategories().stream()
-                    .map(Category::getId)
-                    .collect(Collectors.toSet()));
-
-            dto.setCategoryNames(e.getCategories().stream()
-                    .map(Category::getName)
-                    .collect(Collectors.toSet()));
+        if(product.getCategories() != null
+                && Hibernate.isInitialized(product.getCategories())
+                && !product.getCategories().isEmpty()){
+          Set<CategoryDTO> categoryDTOs = product.getCategories().stream()
+                  .map(category -> new CategoryDTO(category.getId(), category.getName()))
+                  .collect(Collectors.toSet());
+          dto.setCategories(categoryDTOs);
         }
         
         return dto;

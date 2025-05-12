@@ -23,26 +23,20 @@ public class ProductDTO {
     @Min(value = 0, message = "Stock cannot be negative")
     private Integer stock;
 
-    private Integer roomId;
+    private RoomDTO room;
 
-    private String roomName;
-
-    private Set<Integer> categoryIds = new HashSet<>();
-
-    private Set<String> categoryNames = new HashSet<>();
+    private Set<CategoryDTO> categories = new HashSet<>();
 
     // Constructors
     public ProductDTO(){}
 
     public ProductDTO(Integer id, String name, String description, String comment,
-                      Integer stock, Integer roomId, String roomName){
+                      Integer stock){
         this.id = id;
         this.name = name;
         this.description = description;
         this.comment = comment;
         this.stock = stock;
-        this.roomId = roomId;
-        this.roomName = roomName;
     }
 
     // Getters and Setters
@@ -86,35 +80,19 @@ public class ProductDTO {
         this.stock = stock;
     }
 
-    public Integer getRoomId() {
-        return roomId;
+    public RoomDTO getRoom() {
+        return room;
     }
 
-    public void setRoomId(Integer roomId) {
-        this.roomId = roomId;
+    public void setRoom(RoomDTO room) {
+        this.room = room;
     }
 
-    public String getRoomName() {
-        return roomName;
+    public Set<CategoryDTO> getCategories() {
+        return categories;
     }
 
-    public void setRoomName(String roomName) {
-        this.roomName = roomName;
-    }
-
-    public Set<Integer> getCategoryIds() {
-        return categoryIds;
-    }
-
-    public void setCategoryIds(Set<Integer> categoryIds) {
-        this.categoryIds = categoryIds;
-    }
-
-    public Set<String> getCategoryNames() {
-        return categoryNames;
-    }
-
-    public void setCategoryNames(Set<String> categoryNames) {
-        this.categoryNames = categoryNames;
+    public void setCategories(Set<CategoryDTO> categories) {
+        this.categories = categories;
     }
 }
