@@ -1,5 +1,6 @@
 package se.karlminator.cabin_keeper.service;
 
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import se.karlminator.cabin_keeper.error.ResourceNotFoundException;
@@ -55,9 +56,9 @@ public class ProductService {
         return productRepository.save(product);
     }
 
-
+    @Transactional
     public Product updateProduct(Integer id, Product productDetails) {
-        Product existingProduct = productRepository.findById(id)
+        Product existingProduct = productRepository.findByIdWithRoomAndCategories(id)
                 .orElseThrow(()-> new ResourceNotFoundException("Product not found with id: "+id));
 
         // Update the properties we want to allow updating
